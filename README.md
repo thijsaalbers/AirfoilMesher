@@ -45,5 +45,25 @@ For both meshing options, the GMSH FLTK GUI is opened upon finishing mesh genera
 
 ---
 
+## Examples
+
+Some examples to show the functionality of either unstructured grids or ellipticaly generated grids are shown here.
+
+![Elliptically generated mesh](images/elliptic.png)
+
+*Figure 1: Structured mesh of the NACA-2412 airfoil generated using elliptical equations.*
+
+![Elliptically generated mesh zoom](images/ellipticZoom.png)
+
+*Figure 2: Structured mesh of the NACA-2412 airfoil generated using elliptical equations, zoomed in near airfoil*
+
+
+![gmsh generated mesh zoom](images/gmsh.png)
+
+*Figure 3: Unstructured mesh of the NACA-2412 airfoil generated using GMSH.*
+
+![gmsh generated mesh zoom](images/gmshZoom.png)
+
+*Figure 4: Unstructured mesh of the NACA-2412 airfoil generated using GMSH*
 
 
