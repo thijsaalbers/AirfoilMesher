@@ -115,11 +115,10 @@ def exportToGmsh(x, y):
 
     gmsh.fltk.run()
 
-def createEllipticStructuredOGrid(xCoords, yUpper, yLower):
+def createEllipticStructuredOGrid(xCoords, yUpper, yLower, Nr):
 
     # Grid parameters
     Rfarfield = 20.0 # Outer circle (farfield) in amount of chord lengths
-    Nr = 40        # radial points
     # Circumferential points are defined by the airfoil geometry that is provided
 
     # Gauss-Seidel iteration parameters
