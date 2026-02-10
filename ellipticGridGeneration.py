@@ -115,11 +115,7 @@ def exportToGmsh(x, y):
 
     gmsh.fltk.run()
 
-def createEllipticStructuredOGrid(xCoords, yUpper, yLower, Nr):
-
-    # Grid parameters
-    Rfarfield = 20.0 # Outer circle (farfield) in amount of chord lengths
-    # Circumferential points are defined by the airfoil geometry that is provided
+def createEllipticStructuredOGrid(xCoords, yUpper, yLower, Nr, Rfarfield):
 
     # Gauss-Seidel iteration parameters
     max_iter = 5000
@@ -157,6 +153,7 @@ def createEllipticStructuredOGrid(xCoords, yUpper, yLower, Nr):
 
 
     # Iterative Gauss-Seidel algorithm of solving the system of elliptical equations defined by Thomas 1974
+    print(f"Start of Gauss-Seidel iterative solver...")
     for it in range(max_iter):
         x_old = x.copy()
         y_old = y.copy()
@@ -184,10 +181,14 @@ def createEllipticStructuredOGrid(xCoords, yUpper, yLower, Nr):
                 x_xi_eta = 0.25*(x[ip,jp] - x[ip,jm] - x[im,jp] + x[im,jm])
                 y_xi_eta = 0.25*(y[ip,jp] - y[ip,jm] - y[im,jp] + y[im,jm])
 
+                # Source terms influencing the node distribution, for future work
+                P = 0
+                Q = 0
+
                 # Laplace-like update with metrics (explicit Gauss-Seidel)
                 denom = 2*(alpha + gamma)
-                x_new = ((alpha*(x[i,jp]+x[i,jm]) + gamma*(x[ip,j]+x[im,j]) - 2*beta*x_xi_eta)/denom)
-                y_new = ((alpha*(y[i,jp]+y[i,jm]) + gamma*(y[ip,j]+y[im,j]) - 2*beta*y_xi_eta)/denom)
+                x_new = ((alpha*(x[i,jp]+x[i,jm]) + gamma*(x[ip,j]+x[im,j]) - 2*beta*x_xi_eta - P)/denom)
+                y_new = ((alpha*(y[i,jp]+y[i,jm]) + gamma*(y[ip,j]+y[im,j]) - 2*beta*y_xi_eta - Q)/denom)
 
                 # Succesive over relaxation
                 omega = 1.8
@@ -199,6 +200,8 @@ def createEllipticStructuredOGrid(xCoords, yUpper, yLower, Nr):
         if err < tolerance:
             print(f"Gauss-Seidel iteration has converged at iteration {it}")
             break
+        elif it % 10 == 0:
+            print(f"Iteration: {it}; Current error: {err}")
 
     exportToGmsh(x,y)
 

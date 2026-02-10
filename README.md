@@ -46,6 +46,7 @@ These options include:
     --nodeSpacing followed by either uniform, cosLE, or cosLETE to define the node concentration along the airfoil
     --Nc followed by the amount of circumferential nodes defining the airfoil 
     --Nr followed by the amount of radial points, only used by elliptic grid generation
+    --Rfarfield followed by the radius of the farfield mesh measured in chord lengths
 ```
 
 Per example, the code could be called as follows:
@@ -70,23 +71,13 @@ For both meshing options, the GMSH FLTK GUI is opened upon finishing mesh genera
 
 ## Examples
 
-Some examples to show the functionality of either unstructured grids or ellipticaly generated grids are shown here.
+Some examples to show the functionality of either unstructured grids or ellipticaly generated grids are shown here. In the description of each figure the command used for generating it is shown.
 
-![Elliptically generated mesh](images/elliptic.png)
+![Elliptically generated mesh](images/ellipticNACA2412.png)
 
-*Figure 1: Structured mesh of the NACA-2412 airfoil generated using elliptical equations.*
+*Figure 1: python3 AirfoilMesher.py --NACA 2412 --meshingMethod elliptic --Nc 100 --Rfarfield 2*
 
-![Elliptically generated mesh zoom](images/ellipticZoom.png)
+![GMSH generated mesh](images/gmshNACA2412.png)
 
-*Figure 2: Structured mesh of the NACA-2412 airfoil generated using elliptical equations, zoomed in near airfoil*
-
-
-![gmsh generated mesh zoom](images/gmsh.png)
-
-*Figure 3: Unstructured mesh of the NACA-2412 airfoil generated using GMSH.*
-
-![gmsh generated mesh zoom](images/gmshZoom.png)
-
-*Figure 4: Unstructured mesh of the NACA-2412 airfoil generated using GMSH*
-
+*Figure 2: python3 AirfoilMesher.py --NACA 2412 --meshingMethod gmsh --Rfarfield 2 (I am sorry for the green color i have no clue whatsoever how to change it)*
 

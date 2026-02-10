@@ -2,17 +2,18 @@
 import gmsh
 
 
-def createUnstructuredGridGMSH(xCoords, yUpper, yLower):
+def createUnstructuredGridGMSH(xCoords, yUpper, yLower, Rfarfield):
+
+    minMeshSize = 0.01 # Note that the entire mesh scales with this value
 
     # Variables determining mesh
-    r = 20 # Farfield radius
-    lc = 2.5  # mesh size
-    LcMin = 0.002 * lc # Min mesh size near airfoil surface
-    LcMinDist = 0.002 * lc # Distance of minimal mesh size near airfoil surface
+    lc = Rfarfield * (minMeshSize / 0.05) # mesh size
+    LcMin = minMeshSize # Min mesh size near airfoil surface
+    LcMinDist = minMeshSize # Distance of minimal mesh size near airfoil surface
     meshAlgorithm = 6 # 6 = frontal delaunay
     meshOrder = 1
     recombinationAlgorithm = 0 # 0 = less recombinations , 1 = more recombinations
-    recombine = 0 # 0 = no recombination, 1 = recombine
+    recombine = 0 # 0 = no recombination, 1 = recombine using previous recombinationAlgorithm
 
     # Start of GMSH mesh creation
     gmsh.initialize()
@@ -54,13 +55,13 @@ def createUnstructuredGridGMSH(xCoords, yUpper, yLower):
 
     # Create farfield
     
-    cx, cy = 0.0, 0.0  # center
+    cx, cy = 0.5, 0.0  # center
 
     # circle points (4 quarters)
-    pC1 = gmsh.model.geo.addPoint(cx + r, cy, 0, lc)
-    pC2 = gmsh.model.geo.addPoint(cx, cy + r, 0, lc)
-    pC3 = gmsh.model.geo.addPoint(cx - r, cy, 0, lc)
-    pC4 = gmsh.model.geo.addPoint(cx, cy - r, 0, lc)
+    pC1 = gmsh.model.geo.addPoint(cx + Rfarfield, cy, 0, lc)
+    pC2 = gmsh.model.geo.addPoint(cx, cy + Rfarfield, 0, lc)
+    pC3 = gmsh.model.geo.addPoint(cx - Rfarfield, cy, 0, lc)
+    pC4 = gmsh.model.geo.addPoint(cx, cy - Rfarfield, 0, lc)
 
     # center point (for arcs)
     center = gmsh.model.geo.addPoint(cx, cy, 0, lc)
@@ -92,7 +93,7 @@ def createUnstructuredGridGMSH(xCoords, yUpper, yLower):
     gmsh.model.mesh.field.setNumber(threshold_field, "LcMin", LcMin)
     gmsh.model.mesh.field.setNumber(threshold_field, "LcMax", lc)
     gmsh.model.mesh.field.setNumber(threshold_field, "DistMin", LcMinDist)
-    gmsh.model.mesh.field.setNumber(threshold_field, "DistMax", r)  # farfield distance
+    gmsh.model.mesh.field.setNumber(threshold_field, "DistMax", Rfarfield)  # farfield distance
 
     gmsh.model.mesh.field.setAsBackgroundMesh(threshold_field)
 
